@@ -15,10 +15,17 @@ begin
   request = client_socket.recv(4096)
 
   # クライアントから送られてきたデータをファイルに書き出す
-  file = File.open("server_recv.txt", "w")
-  file.write(request)
+  recvFile = File.open("server_recv.txt", "w")
+  recvFile.write(request)
 
-  # 返事は特に返さず、通信を終了させる
+  # クライアントへ返信するレスポンスデータをファイルから取得する
+  sendFile = File.open("server_send.txt", "r")
+  response = sendFile.read()
+
+  # クライアントへレスポンス
+  client_socket.send(response, 0)
+
+  # 通信を終了させる
   client_socket.close()
 
 ensure
